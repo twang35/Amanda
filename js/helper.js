@@ -21,23 +21,20 @@ Number.prototype.mod = function(n) {
 
 // List of venues. These are foursquare IDs, with the idea that eventually it'll tie in 
 venues = {
-    "116208": "Jerry's Subs and Pizza",
-    "66271": "Starbucks",
-    "5518": "Ireland's Four Courts",
-    "392360": "Five Guys",
-    "2210952": "Uptown Cafe",
-    "207306": "Corner Bakery Courthouse",
-    "41457": "Delhi Dhaba",
-    "101161": "TNR Cafe",
-    "257424": "Afghan Kabob House",
-    "512060": "The Perfect Pita",
-    "66244": "California Tortilla",
-    "352867": "Pho 75 - Rosslyn",
-    "22493": "Ragtime",
-    "268052": "Subway",
-    "5665": "Summers Restaurant & Sports Bar",
-    "129724": "Cosi",
-    "42599": "Ray's Hell Burger"
+    "10": "Back Massage",
+    "20": "Foot Bath",
+    "30": "Neck Massage",
+    "40": "Perrier Drink",
+    "50": "Reading Time",
+    "60": "Story Time",
+    "70": "Meal",
+    "80": "Suno",
+    "90": "Cleaning",
+    "120": "Cuddle Time",
+    "130": "Popcorn Time",
+    "140": "Bake Together",
+    "2000": "Dance Together",
+    "160": "Snack Break"
 };
 
 $(function() {
@@ -45,33 +42,33 @@ $(function() {
     var venueContainer = $('#venues');
     $.each(venues, function(key, item) {
         venueContainer.append(
-        $(document.createElement("li")).append(
-        $(document.createElement("input")).attr({
-            id: 'venue-' + key,
-            name: item,
-            value: item,
-            type: 'checkbox',
-            checked: true
-        }).change(function() {
-            var cbox = $(this)[0];
-            var segments = wheel.segments;
-            var i = segments.indexOf(cbox.value);
+            $(document.createElement("li")).append(
+                $(document.createElement("input")).attr({
+                    id: 'venue-' + key,
+                    name: item,
+                    value: item,
+                    type: 'checkbox',
+                    checked: true
+                }).change(function() {
+                    var cbox = $(this)[0];
+                    var segments = wheel.segments;
+                    var i = segments.indexOf(cbox.value);
 
-            if (cbox.checked && i == -1) {
-                segments.push(cbox.value);
+                    if (cbox.checked && i == -1) {
+                        segments.push(cbox.value);
 
-            } else if (!cbox.checked && i != -1) {
-                segments.splice(i, 1);
-            }
+                    } else if (!cbox.checked && i != -1) {
+                        segments.splice(i, 1);
+                    }
 
-            segments.sort();
-            wheel.update();
-        })
+                    segments.sort();
+                    wheel.update();
+                })
 
-        ).append(
-        $(document.createElement('label')).attr({
-            'for': 'venue-' + key
-        }).text(item)))
+            ).append(
+                $(document.createElement('label')).attr({
+                    'for': 'venue-' + key
+                }).text(item)))
     });
 
     $('#venues ul>li').tsort("input", {
@@ -92,8 +89,9 @@ var wheel = {
 
     canvasContext: null,
 
-    colors: ['#ffff00', '#ffc700', '#ff9100', '#ff6301', '#ff0000', '#c6037e',
-             '#713697', '#444ea1', '#2772b2', '#0297ba', '#008e5b', '#8ac819'],
+    colors: ['#52AFE0', '#C50747', '#F71360', '#FF9E40', '#FFD2A6', '#F5E5D6',
+        '#BEC13E', '#E4FF0B', '#B24D85', '#F7D4E7', '#6B2E50'
+    ],
 
     segments: [],
 
@@ -147,7 +145,7 @@ var wheel = {
         wheel.angleCurrent += wheel.angleDelta;
         while (wheel.angleCurrent >= Math.PI * 2)
         // Keep the angle in a reasonable range
-        wheel.angleCurrent -= Math.PI * 2;
+            wheel.angleCurrent -= Math.PI * 2;
 
         if (finished) {
             clearInterval(wheel.timerHandle);
@@ -157,11 +155,11 @@ var wheel = {
             $("#counter").html((wheel.frames / duration * 1000) + " FPS");
         }
 
-/*
-        // Display RPM
-        var rpm = (wheel.angleDelta * (1000 / wheel.timerDelay) * 60) / (Math.PI * 2);
-        $("#counter").html( Math.round(rpm) + " RPM" );
-         */
+        /*
+                // Display RPM
+                var rpm = (wheel.angleDelta * (1000 / wheel.timerDelay) * 60) / (Math.PI * 2);
+                $("#counter").html( Math.round(rpm) + " RPM" );
+                 */
     },
 
     init: function(optionList) {
@@ -215,9 +213,18 @@ var wheel = {
         var colorLen = colors.length;
 
         // Generate a color cache (so we have consistant coloring)
+
+
+var baseColor = "FFE0FF";
+var variation = 50;
+
         var seg_color = new Array();
         for (var i = 0; i < len; i++)
-        seg_color.push(colors[segments[i].hashCode().mod(colorLen)]);
+            // seg_color.push(colors[segments[i].hashCode().mod(colorLen)]);
+            seg_color.push("#"+(parseInt(baseColor, 16) - Math.floor(Math.random() * variation)).toString(16));
+            // seg_color.push("#" + (parseInt("FFF0FF", 16) - Math.floor((Math.random()) * 50)).toString(16));
+            // seg_color.push("#"+(parseInt(baseColor, 16)).toString(16));
+
 
         wheel.seg_color = seg_color;
 
